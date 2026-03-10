@@ -1,0 +1,285 @@
+﻿<Window x:Class="WpfApp2Building_Inspection_Tracker.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp2Building_Inspection_Tracker"
+        mc:Ignorable="d"
+        Title="Building Inspection Tracker" Height="650" Width="900">
+
+    <Window.Resources>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="3"/>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="5,5,5,0"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="StatusColorStyle">
+            <Style.Triggers>
+                <Trigger Property="Text" Value="Pass">
+                    <Setter Property="Foreground" Value="Green"/>
+                </Trigger>
+                <Trigger Property="Text" Value="Fail">
+                    <Setter Property="Foreground" Value="Red"/>
+                </Trigger>
+                <Trigger Property="Text" Value="N/A">
+                 <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="HistoryPassRateStyle">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Red"/>
+            
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding result}" Value="Passed">
+                    <Setter Property="Foreground" Value="Green"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding result}" Value="Failed">
+                    <Setter Property="Foreground" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <TabControl>
+
+            <!-- TAB 1  -->
+            <TabItem Header="New Inspection" x:Name="NewInspectionTab">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Header Fields + Add Item -->
+                    <StackPanel Grid.Column="0">
+
+                        <!-- Header Fields -->
+                        <Label Content="Project Name:"/>
+                        <TextBox Text="{Binding ProjectName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Label Content="Inspector Name:"/>
+                        <TextBox Text="{Binding InspectorName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Label Content="Inspection Type:"/>
+                        <ComboBox ItemsSource="{Binding InspectionTypes}"
+                                  SelectedItem="{Binding SelectedType}"
+                                  Margin="5"/>
+
+                        <Label Content="Date:"/>
+                        <DatePicker SelectedDate="{Binding SelectedDate}" Margin="5"/>
+
+                        <!-- Add Checklist Item -->
+                        <GroupBox Header="Add Checklist Item" Margin="5,10,5,0">
+                            <StackPanel>
+
+                                <Label Content="Item Name:"/>
+                                <TextBox Text="{Binding NewItemName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                <Label Content="Status:"/>
+                                <ComboBox ItemsSource="{Binding StatusOptions}"
+                                          SelectedItem="{Binding SelectedStatus}"
+                                          Margin="5"/>
+
+                                <Label Content="Notes:"/>
+                                <TextBox Text="{Binding NewItemNotes, UpdateSourceTrigger=PropertyChanged}"
+                                         Height="60"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"/>
+
+                                <Button Content="Add Item" Command="{Binding AddItemCommand}"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- Actions -->
+                        <Button Content="Clear Form" Command="{Binding ClearCommand}" Margin="5,20,5,5"/>
+                        <Button Content="Submit Inspection" Command="{Binding SubmitCommand}"
+                                Background="LightBlue" FontWeight="Bold"/>
+                    </StackPanel>
+
+                    <!--  Checklist List + Live Stats -->
+                    <Grid Grid.Column="1" Margin="10,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Checklist Items" FontSize="16" FontWeight="Bold" Margin="0,0,0,5"/>
+
+                        <ListBox Grid.Row="1" ItemsSource="{Binding ChecklistItems}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="Gray" BorderThickness="1" Margin="2" Padding="5">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding itemName}" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding notes}" FontStyle="Italic" FontSize="11"/>
+                                            </StackPanel>
+
+                                            <!-- Status color  -->
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding status}"
+                                                       Style="{StaticResource StatusColorStyle}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="10,0"/>
+
+                                            <Button Grid.Column="2"
+                                                    Content="X"
+                                                    Command="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                    CommandParameter="{Binding}"
+                                                    Padding="5,0"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <!-- Live statistics -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                            <TextBlock Text="Total: "/>
+                            <TextBlock Text="{Binding totalItems}"/>
+                            <TextBlock Text=" | Pass: "/>
+                            <TextBlock Text="{Binding passedCount}" Foreground="Green"/>
+                            <TextBlock Text=" | Fail: "/>
+                            <TextBlock Text="{Binding failedCount}" Foreground="Red"/>
+                            <TextBlock Text=" | N/A: "/>
+                            <TextBlock Text="{Binding NACount}" Foreground="Gray"/>
+                            <TextBlock Text=" | Pass Rate: " FontWeight="Bold" Margin="10,0,0,0"/>
+                            <TextBlock Text="{Binding PassRate, StringFormat={}{0:F1}%}" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- TAB 2-->
+            <TabItem Header="Inspection History" x:Name="HistoryTab">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Filters + Avg -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Label Content="Filter Type:"/>
+                        <ComboBox Width="120" Margin="5"
+                                  SelectedValue="{Binding FilterType}"
+                                  SelectedValuePath="Content">
+                            <ComboBoxItem Content="All"/>
+                            <ComboBoxItem Content="Structural"/>
+                            <ComboBoxItem Content="MEP"/>
+                            <ComboBoxItem Content="Safety"/>
+                            <ComboBoxItem Content="Finishing"/>
+                            <ComboBoxItem Content="Electrical"/>
+                        </ComboBox>
+
+                        <Label Content="Filter Result:"/>
+                        <ComboBox Width="120" Margin="5"
+                                  SelectedValue="{Binding FilterResult}"
+                                  SelectedValuePath="Content">
+                            <ComboBoxItem Content="All"/>
+                            <ComboBoxItem Content="Passed"/>
+                            <ComboBoxItem Content="Failed"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Avg Pass Rate: " VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <TextBlock Text="{Binding AveragePassRate, StringFormat={}{0:F1}%}"
+                                   VerticalAlignment="Center"
+                                   FontWeight="Bold"/>
+                    </StackPanel>
+
+                    
+                    <ListBox Grid.Row="1"
+                             ItemsSource="{Binding FilteredInspections}"
+                             SelectedItem="{Binding SelectedInspection}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="1.5*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Project -->
+                                        <TextBlock Grid.Column="0"
+                                                   Text="{Binding projectName}"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center"/>
+
+                                        <!-- Inspector -->
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding inspectorName}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="10,0,0,0"/>
+
+                                        <!-- Type -->
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding inspectionType}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="10,0,0,0"/>
+
+                                        <!-- Pass Rate -->
+                                        <TextBlock Grid.Column="3"
+                                                   Text="{Binding passRate, StringFormat={}{0:F0}% Pass}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="10,0,0,0"
+                                                   Style="{StaticResource HistoryPassRateStyle}"/>
+
+                                        <!-- Date -->
+                                        <TextBlock Grid.Column="4"
+                                                   Text="{Binding inspictionDate, StringFormat=d}"
+                                                   VerticalAlignment="Center"
+                                                   Margin="10,0,0,0"/>
+
+                                        <!-- Delete -->
+                                        <Button Grid.Column="5"
+                                                Content="Delete"
+                                                Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                CommandParameter="{Binding}"
+                                                VerticalAlignment="Center"
+                                                Margin="10,0,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- Total -->
+                    <TextBlock Grid.Row="2"
+                               Text="{Binding TotalInspections, StringFormat='Total Inspections: {0}'}"
+                               Margin="0,10,0,0"
+                               FontWeight="Bold"/>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>
+<!-- والي هنا ايها السيدات والسادة ينتهي مشروعنا -->

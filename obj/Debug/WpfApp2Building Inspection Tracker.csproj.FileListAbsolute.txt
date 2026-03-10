@@ -1,0 +1,15 @@
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\bin\Debug\WpfApp2Building Inspection Tracker.exe.config
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\bin\Debug\WpfApp2Building Inspection Tracker.exe
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\bin\Debug\WpfApp2Building Inspection Tracker.pdb
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker.csproj.AssemblyReference.cache
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\Views\MainWindow.g.cs
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\App.g.cs
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker_MarkupCompile.cache
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker_MarkupCompile.lref
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\Views\MainWindow.baml
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker.g.resources
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building_Inspection_Tracker.Properties.Resources.resources
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker.csproj.GenerateResource.cache
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker.csproj.CoreCompileInputs.cache
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker.exe
+D:\ITI\WPF\Final Project\WpfApp2Building Inspection Tracker\WpfApp2Building Inspection Tracker\obj\Debug\WpfApp2Building Inspection Tracker.pdb
